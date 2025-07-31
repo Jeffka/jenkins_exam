@@ -24,7 +24,6 @@ pipeline {
                     steps {
                         script {
                         sh '''
-                        echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
                         docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service
                         ''' 
                         }
