@@ -23,7 +23,7 @@ pipeline {
                 stage('cast-service') {
                     steps {
                         script {
-                            def image = docker.build("${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_COMMIT}", "cast-service")
+                            def image = docker.build("${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_COMMIT}", "./cast-service")
                             image.push("${IMAGE_TAG_COMMIT}")
                             image.push("${IMAGE_TAG_LATEST}")
                             image.push("${IMAGE_TAG_BUILD}")
@@ -33,7 +33,7 @@ pipeline {
                 stage('movie-service') {
                     steps {
                         script {
-                            def image = docker.build("${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_COMMIT}", "movie-service")
+                            def image = docker.build("${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_COMMIT}", "./movie-service")
                             image.push("${IMAGE_TAG_COMMIT}")
                             image.push("${IMAGE_TAG_LATEST}")
                             image.push("${IMAGE_TAG_BUILD}")
