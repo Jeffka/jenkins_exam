@@ -19,11 +19,18 @@ pipeline {
         }
 
         stage('Build and Push Images') {
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
+            }
             parallel {
                 stage('cast-service') {
                     steps {
                         script {
-                        sh 'docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service' 
+                        sh '''
+                        echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+                        docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service
+                        ''' 
                         }
                     }
                 }
@@ -37,30 +44,72 @@ pipeline {
             }
         }
         stage('Deploy non-prod environments') {
+            environment {
+                KUBECONFIG = credentials('config')
+            }
             parallel {
                 stage('dev') {
                     steps {
-                        sh 'helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace'
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        cp jenkinsexam/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace
+                        '''
                     }
             }
                 stage('staging') {
                     steps {
-                        sh 'helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace'
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        cp jenkinsexam/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace
+                        '''
                     }
                 }
                 stage('qa') {
                     steps {
-                        sh 'helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace'
+                        sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        cp jenkinsexam/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace
+                        '''
                     }
                 }
             }
         }
         stage('Deploy to prod') {
+            environment {
+                KUBECONFIG = credentials('config')
+            }
             when {
                 branch 'main'
             }
                 steps {
-                    sh 'helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace'
+                    sh '''
+                        rm -Rf .kube
+                        mkdir .kube
+                        ls
+                        cat $KUBECONFIG > .kube/config
+                        cp jenkinsexam/values.yaml values.yml
+                        cat values.yml
+                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                        helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace
+                        '''
                 }
         }
     }
