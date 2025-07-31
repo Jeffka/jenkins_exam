@@ -6,7 +6,7 @@ pipeline {
         DOCKERHUB_USER = 'jeffka'
         IMAGE_TAG_LATEST = 'latest'
         IMAGE_TAG_COMMIT = "${GIT_COMMIT[0..6]}"
-        IMAGE_TAG_BUILD = "build-${BUILD_NUMBER}"
+        IMAGE_TAG_BUILD = "build-${BUILD_ID}"
     }
 
     stages {
@@ -23,20 +23,18 @@ pipeline {
                 stage('cast-service') {
                     steps {
                         script {
-                            def image = docker.build("${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_COMMIT}", "./cast-service")
-                            image.push("${IMAGE_TAG_COMMIT}")
-                            image.push("${IMAGE_TAG_LATEST}")
-                            image.push("${IMAGE_TAG_BUILD}")
+                        sh '''
+                            docker build -t ${imageName}:${IMAGE_TAG_BUILD} ./cast-service
+                            ''' 
                         }
                     }
                 }
                 stage('movie-service') {
                     steps {
-                        script {
-                            def image = docker.build("${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_COMMIT}", "./movie-service")
-                            image.push("${IMAGE_TAG_COMMIT}")
-                            image.push("${IMAGE_TAG_LATEST}")
-                            image.push("${IMAGE_TAG_BUILD}")
+                        script {'''
+                            docker build -t ${imageName}:${IMAGE_TAG_BUILD} ./movie-service
+                            '''
+                            
                         }
                     }
                 }
