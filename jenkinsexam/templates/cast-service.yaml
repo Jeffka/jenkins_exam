@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: cast
+  name: cast-service
+spec:
+  selector:
+    app: cast
+  ports:
+    - port: 8002
+      targetPort: 8002
+      name: http

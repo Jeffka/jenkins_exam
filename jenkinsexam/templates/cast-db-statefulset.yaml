@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: castdb
+  name: castdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: castdb
+  template:
+    metadata:
+      labels:
+        app: castdb
+    spec:
+      containers:
+        - name: castdb
+          image: {{ .Values.castdb.image.repository }}:{{ .Values.castdb.image.tag | default "latest" }}
+          envFrom:
+            - secretRef:
+                name: cast-db-secret
+            - configMapRef:
+                name: cast-db-configmap
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: cast-db-storage
+              mountPath: /var/lib/postgresql/data/
+  volumeClaimTemplates:
+  - metadata:
+      name: cast-db-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
