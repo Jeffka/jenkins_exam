@@ -31,10 +31,10 @@ pipeline {
                 }
                 stage('movie-service') {
                     steps {
-                        script {'''
+                        script {
+                        sh '''
                             docker build -t ${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_BUILD} ./movie-service
                             '''
-                            
                         }
                     }
                 }
