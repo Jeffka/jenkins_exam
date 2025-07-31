@@ -24,7 +24,7 @@ pipeline {
                     steps {
                         script {
                         sh '''
-                            docker build -t ${imageName}:${IMAGE_TAG_BUILD} ./cast-service
+                            docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service
                             ''' 
                         }
                     }
@@ -32,7 +32,7 @@ pipeline {
                 stage('movie-service') {
                     steps {
                         script {'''
-                            docker build -t ${imageName}:${IMAGE_TAG_BUILD} ./movie-service
+                            docker build -t ${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_BUILD} ./movie-service
                             '''
                             
                         }
