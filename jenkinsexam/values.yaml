@@ -70,7 +70,6 @@ nginx:
   service:
     type: NodePort
     port: 8081
-    nodePort: 30081
   configMap:
     nginx.conf: |
       server {
