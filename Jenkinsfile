@@ -23,18 +23,14 @@ pipeline {
                 stage('cast-service') {
                     steps {
                         script {
-                        sh '''
-                            docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service
-                            ''' 
+                        sh 'docker build -t ${DOCKERHUB_USER}/cast-service:${IMAGE_TAG_BUILD} ./cast-service' 
                         }
                     }
                 }
                 stage('movie-service') {
                     steps {
                         script {
-                        sh '''
-                            docker build -t ${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_BUILD} ./movie-service
-                            '''
+                        sh 'docker build -t ${DOCKERHUB_USER}/movie-service:${IMAGE_TAG_BUILD} ./movie-service'
                         }
                     }
                 }
@@ -44,17 +40,17 @@ pipeline {
             parallel {
                 stage('dev') {
                     steps {
-                        sh 'sudo helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace'
+                        sh 'helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace'
                     }
             }
                 stage('staging') {
                     steps {
-                        sh 'sudo helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace'
+                        sh 'helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace'
                     }
                 }
                 stage('qa') {
                     steps {
-                        sh 'sudo helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace'
+                        sh 'helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace'
                     }
                 }
             }
@@ -64,7 +60,7 @@ pipeline {
                 branch 'main'
             }
                 steps {
-                    sh 'sudo helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace'
+                    sh 'helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace'
                 }
         }
     }
