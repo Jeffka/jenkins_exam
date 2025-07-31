@@ -19,10 +19,6 @@ pipeline {
         }
 
         stage('Build and Push Images') {
-            environment
-            {
-                DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
-            }
             parallel {
                 stage('cast-service') {
                     steps {
