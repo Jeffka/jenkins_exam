@@ -103,20 +103,18 @@ pipeline {
                 timeout(time: 15, unit: "MINUTES") {
                         input message: 'Déployer en production ?', ok: 'Oui'
                 }
-                
-            
-                steps {
-                    sh '''
-                        rm -Rf .kube
-                        mkdir .kube
-                        ls
-                        echo $KUBECONFIG > .kube/config
-                        cp jenkinsexam/values.yaml values.yml
-                        cat values.yml
-                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace
-                        '''
-                }
+            steps {
+                sh '''
+                    rm -Rf .kube
+                    mkdir .kube
+                    ls
+                    echo $KUBECONFIG > .kube/config
+                    cp jenkinsexam/values.yaml values.yml
+                    cat values.yml
+                    sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                    helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace
+                    '''
+            }
         }
     }
 
