@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: castdb
-          image: {{ .Values.castdb.image.repository }}:{{ .Values.castdb.image.tag | default "latest" }}
+          image: postgres:12.1-alpine
           envFrom:
             - secretRef:
                 name: cast-db-secret

@@ -24,8 +24,8 @@ pipeline {
                     steps {
                         script {
                         sh '''
-                        docker build -t ${DOCKERHUB_USER}/cast-service:latest ./cast-service
-                        docker push ${DOCKERHUB_USER}/cast-service:latest
+                        docker build -t ${DOCKERHUB_USER}/k-cast-service:latest ./cast-service
+                        docker push ${DOCKERHUB_USER}/k-cast-service:latest
                         ''' 
                         }
                     }
@@ -34,8 +34,8 @@ pipeline {
                     steps {
                         script {
                         sh '''
-                        docker build -t ${DOCKERHUB_USER}/movie-service:latest ./movie-service
-                        docker push ${DOCKERHUB_USER}/movie-service:latest
+                        docker build -t ${DOCKERHUB_USER}/k-movie-service:latest ./movie-service
+                        docker push ${DOCKERHUB_USER}/k-movie-service:latest
                         '''
                         }
                     }
