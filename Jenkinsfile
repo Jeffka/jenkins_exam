@@ -42,55 +42,51 @@ pipeline {
                 }
             }
         }
-        stage('Deploy non-prod environments') {
-            environment {
-                KUBECONFIG = credentials('config')
-            }
-            parallel {
-                stage('dev') {
-                    steps {
-                        sh '''
-                        rm -Rf .kube
-                        mkdir .kube
-                        ls
-                        cat $KUBECONFIG > .kube/config
-                        cp jenkinsexam/values.yaml values.yml
-                        cat values.yml
-                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace
-                        '''
-                    }
-            }
-                stage('staging') {
-                    steps {
-                        sh '''
-                        rm -Rf .kube
-                        mkdir .kube
-                        ls
-                        cat $KUBECONFIG > .kube/config
-                        cp jenkinsexam/values.yaml values.yml
-                        cat values.yml
-                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace
-                        '''
-                    }
-                }
-                stage('qa') {
-                    steps {
-                        sh '''
-                        rm -Rf .kube
-                        mkdir .kube
-                        ls
-                        cat $KUBECONFIG > .kube/config
-                        cp jenkinsexam/values.yaml values.yml
-                        cat values.yml
-                        sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-                        helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace
-                        '''
-                    }
-                }
+            
+        stage('Deploy to dev') {
+            steps {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp jenkinsexam/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install jenkins-dev ./jenkinsexam --namespace dev --create-namespace
+                '''
             }
         }
+        stage('Deploy to staging') {
+            steps {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp jenkinsexam/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install jenkins-staging ./jenkinsexam --namespace staging --create-namespace
+                '''
+            }
+        }
+        stage('Deploy to qa') {
+            steps {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp jenkinsexam/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace
+                '''
+            }
+        }
+            
+        
         stage('Deploy to prod') {
             environment {
                 KUBECONFIG = credentials('config')
