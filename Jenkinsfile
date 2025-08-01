@@ -49,7 +49,7 @@ pipeline {
                 rm -Rf .kube
                 mkdir .kube
                 ls
-                cat $KUBECONFIG > .kube/config
+                echo $KUBECONFIG > .kube/config
                 cp jenkinsexam/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -63,7 +63,7 @@ pipeline {
                 rm -Rf .kube
                 mkdir .kube
                 ls
-                cat $KUBECONFIG > .kube/config
+                echo $KUBECONFIG > .kube/config
                 cp jenkinsexam/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -77,7 +77,7 @@ pipeline {
                 rm -Rf .kube
                 mkdir .kube
                 ls
-                cat $KUBECONFIG > .kube/config
+                echo $KUBECONFIG > .kube/config
                 cp jenkinsexam/values.yaml values.yml
                 cat values.yml
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
@@ -99,7 +99,7 @@ pipeline {
                         rm -Rf .kube
                         mkdir .kube
                         ls
-                        cat $KUBECONFIG > .kube/config
+                        echo $KUBECONFIG > .kube/config
                         cp jenkinsexam/values.yaml values.yml
                         cat values.yml
                         sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
