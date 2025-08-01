@@ -104,7 +104,7 @@ pipeline {
                         input message: 'Déployer en production ?', ok: 'Oui'
                 }
                 
-            }
+            
                 steps {
                     sh '''
                         rm -Rf .kube
