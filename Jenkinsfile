@@ -100,8 +100,10 @@ pipeline {
             environment {
                 KUBECONFIG = credentials('config')
             }
-            when {
-                branch 'main'
+                timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Déployer en production ?', ok: 'Oui'
+                }
+                
             }
                 steps {
                     sh '''
