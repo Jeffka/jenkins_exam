@@ -44,6 +44,9 @@ pipeline {
         }
             
         stage('Deploy to dev') {
+            environment {
+                KUBECONFIG = credentials('config')
+            }
             steps {
                 sh '''
                 rm -Rf .kube
@@ -58,6 +61,9 @@ pipeline {
             }
         }
         stage('Deploy to staging') {
+            environment {
+                KUBECONFIG = credentials('config')
+            }
             steps {
                 sh '''
                 rm -Rf .kube
@@ -72,6 +78,9 @@ pipeline {
             }
         }
         stage('Deploy to qa') {
+            environment {
+                KUBECONFIG = credentials('config')
+            }
             steps {
                 sh '''
                 rm -Rf .kube
