@@ -34,7 +34,7 @@ pipeline {
                     steps {
                         script {
                         sh '''
-                        docker build -t ${DOCKERHUB_USER}/movie-service:$latest ./movie-service
+                        docker build -t ${DOCKERHUB_USER}/movie-service:latest ./movie-service
                         docker push ${DOCKERHUB_USER}/movie-service:latest
                         '''
                         }
