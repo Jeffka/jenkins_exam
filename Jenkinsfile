@@ -82,6 +82,10 @@ pipeline {
                 KUBECONFIG = credentials('config')
             }
             steps {
+                timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Déployer en production ?', ok: 'Oui'
+                }
+                script {
                 sh '''
                 rm -Rf .kube
                 mkdir .kube
@@ -92,6 +96,7 @@ pipeline {
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 helm upgrade --install jenkins-qa ./jenkinsexam --namespace qa --create-namespace
                 '''
+                }
             }
         }
             
@@ -100,9 +105,6 @@ pipeline {
             environment {
                 KUBECONFIG = credentials('config')
             }
-                timeout(time: 15, unit: "MINUTES") {
-                        input message: 'Déployer en production ?', ok: 'Oui'
-                }
             steps {
                 sh '''
                     rm -Rf .kube
