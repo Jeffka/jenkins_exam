@@ -38,8 +38,6 @@ pipeline {
                         docker push ${DOCKERHUB_USER}/movie-service:latest
                         '''
                         }
-                        '''
-                        }
                     }
                 }
             }
