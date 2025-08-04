@@ -104,7 +104,6 @@ pipeline {
                 timeout(time: 15, unit: "MINUTES") {
                         input message: 'Déployer en production ?', ok: 'Oui'
                 }
-                script {
                 sh '''
                 rm -Rf .kube
                 mkdir .kube
@@ -115,7 +114,6 @@ pipeline {
                 sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
                 helm upgrade --install jenkins-prod ./jenkinsexam --namespace prod --create-namespace
                 '''
-                }
             }
         }
     }
